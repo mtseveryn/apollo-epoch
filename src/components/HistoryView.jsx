@@ -17,7 +17,6 @@ const HistoryView = () => {
   for (let i = 0; i < queryHistory.length; i += 1) {
     const timelineObj = queryHistory[i];
     const activeFlag = activeQuery.id === timelineObj.id;
-    console.log('activeFlag ->', activeFlag);
     queries.push(
       <HistoryViewQuery
         key={timelineObj.id}

@@ -17,6 +17,7 @@ import {
 } from '../messagesAndActionTypes/initializeActions';
 import sendMessageTypes from '../messagesAndActionTypes/messageTypes';
 import { log, error } from '../messagesAndActionTypes/loggerActions';
+import { getRootFiber } from '../entities/fiberSnapshots';
 
 const initializePort = ({ dispatch }) => (next) => (action) => {
   if (action.type !== connectToBackground.type) return next(action);
@@ -57,6 +58,7 @@ const initializePort = ({ dispatch }) => (next) => (action) => {
 
       if (message.type === background.apolloReceivedManual) {
         dispatch({ type: receivedApolloManual, payload: message.payload });
+        dispatch(getRootFiber({ manualFetch: true }));
       }
 
       if (message.type === background.apolloReceived) {

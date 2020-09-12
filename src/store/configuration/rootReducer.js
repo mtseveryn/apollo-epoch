@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 // import { enableMapSet } from 'immer';
 import apolloReducer from '../entities/apollo';
+import fiberSnapshotReducer from '../entities/fiberSnapshots';
 
 // enableMapSet();
 /*
@@ -12,4 +13,5 @@ layer between this and our actual slice reducers
 
 export default combineReducers({
   apollo: apolloReducer,
+  fiberSnaps: fiberSnapshotReducer,
 });
