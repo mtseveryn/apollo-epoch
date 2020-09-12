@@ -38,9 +38,12 @@ export default takeSnapshot;
 function getAsyncFiberRoot() {
   return new Promise((resolve, reject) => {
     console.log('Calling async Root get');
-    chrome.devtools.inspectedWindow.eval(`document.getElementById('root')`, (rootFiber) => {
-      console.log('Root in Async -> ', rootFiber);
-      resolve(rootFiber);
-    });
+    chrome.devtools.inspectedWindow.eval(
+      `document.getElementById('root')._reactRootContainer._internalRoot`,
+      (rootFiber) => {
+        console.log('Root in Async -> ', rootFiber);
+        resolve(rootFiber);
+      }
+    );
   });
 }
