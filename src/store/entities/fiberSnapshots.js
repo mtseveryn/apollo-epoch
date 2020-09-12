@@ -38,8 +38,8 @@ export default fiberSnapshotReducer;
   ACTION GENERATORS
 --------------------*/
 
-export const getRootFiber = (apolloActionId) =>
+export const getRootFiber = (payload) =>
   takeStateSnapshot({
-    data: apolloActionId,
+    data: payload.manualFetch,
     onSuccess: FIBER_RECEIVED,
   });

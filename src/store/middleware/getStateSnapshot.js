@@ -6,6 +6,7 @@ const takeSnapshot = ({ getState, dispatch }) => (next) => async (action) => {
   if (action.type !== takeStateSnapshot.type) return next(action);
 
   try {
+    console.log('Trying to getSnapshot');
     const { onSuccess, data: isManualFetch } = action.payload;
     const state = getState().apollo;
     let apolloActionKey;
@@ -17,6 +18,7 @@ const takeSnapshot = ({ getState, dispatch }) => (next) => async (action) => {
     const rootFiber = await getAsyncFiberRoot();
 
     dispatch({ type: onSuccess, payload: { apolloActionKey, rootFiber } });
+    console.log('Dispatched Successful SnapShot');
   } catch (e) {
     dispatch({
       type: ERROR,
@@ -35,11 +37,10 @@ export default takeSnapshot;
 
 function getAsyncFiberRoot() {
   return new Promise((resolve, reject) => {
-    chrome.devtools.inspectedWindow.eval(
-      'window.__REACT_DEVTOOLS_GLOBAL_HOOK__getFiberRoots(1).values().next().value',
-      (rootFiber) => {
-        resolve(rootFiber);
-      }
-    );
+    console.log('Calling async Root get');
+    chrome.devtools.inspectedWindow.eval(`document.getElementById('root')`, (rootFiber) => {
+      console.log('Root in Async -> ', rootFiber);
+      resolve(rootFiber);
+    });
   });
 }

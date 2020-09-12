@@ -183,7 +183,9 @@ into our application. Client App -> Content Script -> Background Script -> Epoch
 */
 const sendMessageWithCache = (queryCount, mutationCount, initialize, manualFetch) => {
   const apolloData = window.__APOLLO_CLIENT__.queryManager;
+  // const rootFiber = window.__REACT_DEVTOOLS_GLOBAL_HOOK__.getFiberRoots(1).values().next().value;
   console.log('WINDOW TEST', apolloData);
+  // console.log('ROOT FIBER', rootFiber);
   if (!apolloData) {
     window.postMessage({ type: '$$$noApollo$$$' });
     return;
