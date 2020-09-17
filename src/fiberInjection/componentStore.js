@@ -1,89 +1,41 @@
 /* eslint-disable func-names */
 /*
-  This module creates a store for unserializable component data, organized by tabID, that will live in the DOM
+  This module creates a store for unserializable apollo client snapshots taken from the apollo client contenxt.
+  This store will live in the DOM on the Epoch Hook
 
 ------------------
   Data Structure
 ------------------
-tabStore = {
-  [tabId]: componentStore
-}
 
-componentStore = {
-  nextComponentId
-  [componentId]: {stateObj, actualComponent} - actualComponent is straight from react
-}
+ApolloClientStore = {
 
-stateObj = {classComponentState, hooksStates: [hookStateObj]} - classComponent State and hookStateObj are straight from React
+  [apolloActionId]: {apolloClientObjClone} //Apollo Action IDs correspond to the queries, mutations, or manual fetches that triggered the snap
+}
 
 */
 
-// function TabStore() {
-//   const tabStore = {};
-
-//   Object.defineProperties(this, {
-//     tabStore: {
-//       get() {
-//         return tabStore;
-//       },
-//     },
-//   });
-// }
-
-// TabStore.prototype.addComponentStore = function (tabId) {
-//   if (this.tabStore[tabId]) return `Component Store already exists for Tab Id: ${tabId}`;
-//   this.tabStore[tabId] = new ComponentStore();
-//   return this.tabStore[tabId];
-// };
-
-// TabStore.prototype.getComponentStore = function (tabId) {
-//   if (!tabId || !this.tabStore.tabId) return undefined; // stupid linting rule
-//   return this.tabStore[tabId];
-// };
-
-// TabStore.prototype.deleteComponentStore = function (tabId) {
-//   delete this.tabStore(tabId);
-// };
-
-function ComponentStore() {
-  let nextComponentId = 0;
-  const components = {};
+function ApolloClientStore() {
+  const clientObjs = {};
 
   Object.defineProperties(this, {
-    components: {
+    historicalClients: {
       get() {
-        return components;
-      },
-    },
-
-    nextComponentId: {
-      get() {
-        return nextComponentId;
-      },
-      set(x) {
-        nextComponentId += 1;
+        return clientObjs;
       },
     },
   });
 }
 
-ComponentStore.prototype.addComponent = function (stateDataStructure, actualComponent, treeId) {
-  // Create stateObj -- cover Hooks Cases (array of states), and class cases (state Obj)
-  let stateObj;
-  if (Array.isArray(stateDataStructure)) stateObj = { hooksStates: stateDataStructure };
-  else {
-    stateObj = { classComponentState: stateDataStructure };
-  }
-
-  const componentId = `${treeId}${this.nextComponentId}`;
-  this.components[componentId] = { stateObj, actualComponent };
-  this.nextComponentId += 1;
-  return componentId;
+// This was a lot more complex when we were getting and storing the React Fiber Tree
+/// These can be refactored into methods on the main object -- if they're needed at all
+ApolloClientStore.prototype.addClientClone = function (clientObj, apolloActionId) {
+  this.historicalClients[apolloActionId] = clientObj;
+  return clientObj;
 };
 
-ComponentStore.prototype.getComponent = function (componentId) {
-  return this.components[componentId];
+ApolloClientStore.prototype.getClientClone = function (apolloActionId) {
+  return this.historicalClients[apolloActionId];
 };
 
-console.log('COMPONENT STORE IS INJECTED!');
-export default ComponentStore;
+console.log('APOLLO CLIENT STORE IS INJECTED!');
+export default ApolloClientStore;

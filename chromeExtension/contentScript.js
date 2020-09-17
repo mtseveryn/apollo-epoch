@@ -71,6 +71,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   if (message.type === epoch.getFiberTree) {
+    console.log('Create Clone Message -> ', message);
     window.postMessage(message, '*');
   }
 
