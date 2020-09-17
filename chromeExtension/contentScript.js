@@ -137,6 +137,11 @@ window.addEventListener('message', (event) => {
       payload: event.data.payload,
     });
   }
+
+  if (event.data && event.data.type === clientWindow.updateCounters) {
+    const { queryIdCounter, mutationIdCounter } = event.data.payload;
+    counts.updateCounts(queryIdCounter, mutationIdCounter);
+  }
 });
 
 window.addEventListener('keyup', (e) => {

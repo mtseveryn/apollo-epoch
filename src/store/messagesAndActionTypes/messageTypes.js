@@ -33,6 +33,7 @@ const sendMessageTypes = {
     queryUpdate: '$$$queryUpdate$$$',
     noApolloClient: '$$$noApollo$$$',
     snapShotCompleted: '$$$saveSnapshot$$$',
+    updateCounters: '$$$changeCounters$$$',
     log: LOG,
   }, // ensure no window message conflicts
 };

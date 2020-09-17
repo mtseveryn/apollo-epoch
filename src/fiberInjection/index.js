@@ -19,6 +19,7 @@ console.log('INJECTED SCRIPT EPOCH IS HERE');
 
 window[epochHookProp] = epochHookObj;
 
-function eatMyShorts() {
+function eatMyShorts(apolloActionId) {
   console.log('Your shorts have been et');
+  window.postMessage({ type: '$$$initiateTimeJump$$$', payload: apolloActionId }, '*');
 }
