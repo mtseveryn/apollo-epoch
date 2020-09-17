@@ -115,7 +115,7 @@ function CustomFiberNode(componentId, unserializedState, reactFiber) {
   this.elementType = elementType ? elementType.name : 'No Type';
   this.isStatefulComponent = false;
   this.tag = tag;
-  console.log('ELEMENT TYPE IN CUSTOM FIBER NODE ->', elementType);
+  // console.log('ELEMENT TYPE IN CUSTOM FIBER NODE ->', elementType);
 
   if (unserializedState) {
     this.componentData.serializedState = serializeState(unserializedState);
@@ -147,8 +147,8 @@ function createHooksNode(hooksFiber, componentStore, treeId) {
     while (memoizedState && memoizedState.queue) {
       if (
         memoizedState.memoizedState &&
-        memoizedState.queue.lastRenderedReducer &&
-        memoizedState.queue.lastRenderedReducer.name === 'basicStateReducer'
+        memoizedState.queue.lastRenderedReducer // &&
+        //  memoizedState.queue.lastRenderedReducer.name === 'basicStateReducer'
       ) {
         const { memoizedState: state, queue } = memoizedState;
         hookStateObjsForComponentStore.push({
