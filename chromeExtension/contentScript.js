@@ -203,7 +203,7 @@ into our application. Client App -> Content Script -> Background Script -> Epoch
 */
 const sendMessageWithCache = (queryCount, mutationCount, initialize, manualFetch) => {
   const apolloData = window.__APOLLO_CLIENT__.queryManager;
-  console.log('WINDOW TEST', apolloData);
+  // console.log('WINDOW TEST', apolloData);
   if (!apolloData) {
     window.postMessage({ type: '$$$noApollo$$$' });
     return;
