@@ -70,7 +70,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ type: contentScript.log, payload: { title: 'Manual Fetch Triggered' } }); // should trigger response based on hasApollo in Redux
   }
 
-  if (message.type === epoch.getFiberTree) {
+  if (message.type === epoch.createSnapshot) {
     window.postMessage(message, '*');
   }
 

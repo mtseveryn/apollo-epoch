@@ -46,7 +46,7 @@ window.addEventListener('message', (event) => {
     );
   }
 
-  if (event.data && event.data.type === '$$$getFiberTree$$$') {
+  if (event.data && event.data.type === '$$$createHistoricalSnapshot$$$') {
     console.log('GETTING ROOT FIBER');
     const { historicalClients, historicalComponents } = epochHook.apolloHistory;
     const apolloActionId = event.data.payload;

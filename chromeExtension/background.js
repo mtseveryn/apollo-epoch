@@ -232,7 +232,7 @@ chrome.runtime.onConnect.addListener((port) => {
       });
     }
 
-    if (type === epoch.getFiberTree) {
+    if (type === epoch.createSnapshot) {
       console.log('tabId', message.payload);
       console.log('tabId', message.type);
       const newMessage = { type, payload: data }; // Strip out tabId from payload -- No longer necessary

@@ -209,7 +209,7 @@ function receivedManualFetchCase(state, action) {
   state.manualFetchIds.push(fetchId);
   state.manualFetches[fetchId] = fetchObj;
   superPort.connection.postMessage({
-    type: sendMessageTypes.epoch.getFiberTree,
+    type: sendMessageTypes.epoch.createSnapshot,
     payload: { tabId: chrome.devtools.inspectedWindow.tabId, data: fetchId },
   });
 }
@@ -274,7 +274,7 @@ function receivedNetworkQueryCase(state, action) {
   state.timeline.push(id);
   delete state.networkHoldingRoom[queryKey];
   superPort.connection.postMessage({
-    type: sendMessageTypes.epoch.getFiberTree,
+    type: sendMessageTypes.epoch.createSnapshot,
     payload: { tabId: chrome.devtools.inspectedWindow.tabId, data: id },
   });
   console.log('networkHoldingRoom Clean', state.networkHoldingRoom);
@@ -410,7 +410,7 @@ function processApolloData(state, apolloData) {
           state.mutationIds.push(id);
           state.mutations[id] = stateMutationObj;
           superPort.connection.postMessage({
-            type: sendMessageTypes.epoch.getFiberTree,
+            type: sendMessageTypes.epoch.createSnapshot,
             payload: { tabId: chrome.devtools.inspectedWindow.tabId, data: id },
           });
         }
@@ -447,7 +447,7 @@ function processApolloData(state, apolloData) {
           state.queryIds.push(id);
           state.queries[id] = stateQueryObj;
           superPort.connection.postMessage({
-            type: sendMessageTypes.epoch.getFiberTree,
+            type: sendMessageTypes.epoch.createSnapshot,
             payload: { tabId: chrome.devtools.inspectedWindow.tabId, data: id },
           });
         }
