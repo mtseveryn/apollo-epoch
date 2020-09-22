@@ -6,12 +6,12 @@
 
 // To Do - Implement custom deep clone function
 import { cloneDeep } from 'lodash'; // importing just the cloneDeep package throws a range Error when run...so all this must go in the DOM
-import ComponentStore from './ComponentStore';
+import Tardis from './Tardis';
 import CustomFiberTree from './CustomFiberTree';
 
 const epochHookProp = '__APOLLO_EPOCH_FIBER_HOOK';
 const epochHookObj = {
-  componentStore: new ComponentStore(),
+  apolloHistory: new Tardis(),
   testFunction: eatMyShorts,
 };
 
@@ -24,16 +24,22 @@ window.addEventListener('message', (event) => {
   if (event.data && event.data.type === '$$$initializeComponentStoreScript$$$') {
     console.log('Initializing Component Store');
 
-    const { componentStore } = epochHook;
+    const { historicalComponents, historicalClients } = epochHook.apolloHistory;
 
     const devTools = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
-    const apolloClientObj = window.__APOLLO_CLIENT__;
-    const apolloClientClone = cloneDeep(apolloClientObj);
-    console.log('CLONE -> ', apolloClientClone);
     const hostRootFiber = devTools.getFiberRoots(1).values().next().value;
     console.log('STARTING FIBER TREE');
-    const initialFiberSnapshot = new CustomFiberTree(hostRootFiber, componentStore, 'initialState');
+    const initialFiberSnapshot = new CustomFiberTree(
+      hostRootFiber,
+      historicalComponents,
+      'initialState'
+    );
     console.log('INITIAL FIBER TREE CREATED -> ', initialFiberSnapshot);
+
+    const apolloClientObj = window.__APOLLO_CLIENT__;
+    const apolloClientClone = cloneDeep(apolloClientObj);
+    historicalClients.addHistoricalClient(apolloClientClone, 'initialClient');
+    console.log('CLONE -> ', apolloClientClone);
     window.postMessage(
       { type: '$$$saveSnapshot$$$', payload: JSON.stringify(initialFiberSnapshot) },
       '*'
@@ -42,15 +48,21 @@ window.addEventListener('message', (event) => {
 
   if (event.data && event.data.type === '$$$getFiberTree$$$') {
     console.log('GETTING ROOT FIBER');
-    const { componentStore } = epochHook;
+    const { historicalClients, historicalComponents } = epochHook.apolloHistory;
     const apolloActionId = event.data.payload;
     const devTools = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+    const hostRootFiber = devTools.getFiberRoots(1).values().next().value;
+    const initialFiberSnapshot = new CustomFiberTree(
+      hostRootFiber,
+      historicalComponents,
+      apolloActionId
+    );
+    console.log('USER FIBER TREE CREATED -> ', initialFiberSnapshot);
+
     const apolloClientObj = window.__APOLLO_CLIENT__;
     const apolloClientClone = cloneDeep(apolloClientObj);
+    historicalClients.addHistoricalClient(apolloClientClone, 'initialClient');
     console.log('CLONE -> ', apolloClientClone);
-    const hostRootFiber = devTools.getFiberRoots(1).values().next().value;
-    const initialFiberSnapshot = new CustomFiberTree(hostRootFiber, componentStore, apolloActionId);
-    console.log('USER FIBER TREE CREATED -> ', initialFiberSnapshot);
     window.postMessage(
       { type: '$$$saveSnapshot$$$', payload: JSON.stringify(initialFiberSnapshot) },
       '*'
@@ -58,9 +70,11 @@ window.addEventListener('message', (event) => {
   }
 
   if (event.data && event.data.type === 'initiateTimeJump') {
-    const { tabId } = event.data;
+    const { apolloActionId } = event.data.payload;
     epochHook.testFunction();
-    console.log('rootFiber ->', epochHook.componentStore[tabId]);
+    const { historicalClients, historicalComponents } = epochHook.apolloHistory;
+    // console.log('rootFiber ->', historicalComponents[apolloActionId]);
+    console.log('historicalClient ->', historicalClients[apolloActionId]);
   }
 });
 

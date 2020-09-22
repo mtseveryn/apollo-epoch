@@ -127,7 +127,7 @@ function CustomFiberNode(componentId, unserializedState, reactFiber) {
       HELPERS
 ---------------------*/
 function serializeState(unserializedState) {
-  console.log('FLATTENING YOUR STATE! ->', unserializedState);
+  // console.log('FLATTENING YOUR STATE! ->', unserializedState);
   return 'PLACEHOLDER STATE OBJ';
 }
 

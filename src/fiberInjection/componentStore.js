@@ -1,13 +1,7 @@
-/* eslint-disable func-names */
 /*
-  This module creates a store for unserializable component data, organized by tabID, that will live in the DOM
-
 ------------------
   Data Structure
 ------------------
-tabStore = {
-  [tabId]: componentStore
-}
 
 componentStore = {
   nextComponentId
@@ -18,41 +12,14 @@ stateObj = {classComponentState, hooksStates: [hookStateObj]} - classComponent S
 
 */
 
-// function TabStore() {
-//   const tabStore = {};
-
-//   Object.defineProperties(this, {
-//     tabStore: {
-//       get() {
-//         return tabStore;
-//       },
-//     },
-//   });
-// }
-
-// TabStore.prototype.addComponentStore = function (tabId) {
-//   if (this.tabStore[tabId]) return `Component Store already exists for Tab Id: ${tabId}`;
-//   this.tabStore[tabId] = new ComponentStore();
-//   return this.tabStore[tabId];
-// };
-
-// TabStore.prototype.getComponentStore = function (tabId) {
-//   if (!tabId || !this.tabStore.tabId) return undefined; // stupid linting rule
-//   return this.tabStore[tabId];
-// };
-
-// TabStore.prototype.deleteComponentStore = function (tabId) {
-//   delete this.tabStore(tabId);
-// };
-
 function ComponentStore() {
   let nextComponentId = 0;
-  const components = {};
+  const historicalComponents = {};
 
   Object.defineProperties(this, {
-    components: {
+    historicalComponents: {
       get() {
-        return components;
+        return historicalComponents;
       },
     },
 
@@ -76,13 +43,13 @@ ComponentStore.prototype.addComponent = function (stateDataStructure, actualComp
   }
 
   const componentId = `${treeId}${this.nextComponentId}`;
-  this.components[componentId] = { stateObj, actualComponent };
+  this.historicalComponents[componentId] = { stateObj, actualComponent };
   this.nextComponentId += 1;
   return componentId;
 };
 
 ComponentStore.prototype.getComponent = function (componentId) {
-  return this.components[componentId];
+  return this.historicalComponents[componentId];
 };
 
 console.log('COMPONENT STORE IS INJECTED!');
