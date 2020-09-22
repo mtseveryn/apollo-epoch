@@ -4,7 +4,9 @@
  Creates windowListener that will receive messages from Epoch App / Content Script
 */
 
-import ComponentStore from './componentStore';
+// To Do - Implement custom deep clone function
+import { cloneDeep } from 'lodash'; // importing just the cloneDeep package throws a range Error when run...so all this must go in the DOM
+import ComponentStore from './ComponentStore';
 import CustomFiberTree from './CustomFiberTree';
 
 const epochHookProp = '__APOLLO_EPOCH_FIBER_HOOK';
@@ -25,6 +27,9 @@ window.addEventListener('message', (event) => {
     const { componentStore } = epochHook;
 
     const devTools = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+    const apolloClientObj = window.__APOLLO_CLIENT__;
+    const apolloClientClone = cloneDeep(apolloClientObj);
+    console.log('CLONE -> ', apolloClientClone);
     const hostRootFiber = devTools.getFiberRoots(1).values().next().value;
     console.log('STARTING FIBER TREE');
     const initialFiberSnapshot = new CustomFiberTree(hostRootFiber, componentStore, 'initialState');
@@ -40,6 +45,9 @@ window.addEventListener('message', (event) => {
     const { componentStore } = epochHook;
     const apolloActionId = event.data.payload;
     const devTools = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+    const apolloClientObj = window.__APOLLO_CLIENT__;
+    const apolloClientClone = cloneDeep(apolloClientObj);
+    console.log('CLONE -> ', apolloClientClone);
     const hostRootFiber = devTools.getFiberRoots(1).values().next().value;
     const initialFiberSnapshot = new CustomFiberTree(hostRootFiber, componentStore, apolloActionId);
     console.log('USER FIBER TREE CREATED -> ', initialFiberSnapshot);

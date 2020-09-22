@@ -64,8 +64,8 @@ export default class CustomFiberTree {
     if (!customFiberNode && (tag === 0 || tag === 1 || tag === 2 || tag === 3)) {
       customFiberNode = createStatelessNode(reactFiber, this.treeId);
     }
-    console.log('CURRENT REACT FIBER -> ', reactFiber);
-    console.log('CURRENT CUSTOM FIBER NODE ->', customFiberNode);
+    // console.log('CURRENT REACT FIBER -> ', reactFiber);
+    // console.log('CURRENT CUSTOM FIBER NODE ->', customFiberNode);
     return customFiberNode;
   }
 
@@ -136,7 +136,7 @@ function serializeState(unserializedState) {
 // The queue should be the component in which the hooks reside
 // Individual hooksFibers also have a memoized state property which appears to be another linked list to ... don't know yet
 function createHooksNode(hooksFiber, componentStore, treeId) {
-  console.log('Creating Hooks Node');
+  // console.log('Creating Hooks Node');
   let { memoizedState } = hooksFiber;
   const hookStateObjsForComponentStore = [];
   const treeHooksStates = [];
@@ -170,7 +170,7 @@ function createHooksNode(hooksFiber, componentStore, treeId) {
 }
 
 function createClassNode(reactFiber, componentStore, treeId) {
-  console.log('Creating Class Node');
+  // console.log('Creating Class Node');
   const { stateNode } = reactFiber;
   const componentId = componentStore.addComponent(stateNode.state, stateNode, treeId);
 
@@ -178,6 +178,6 @@ function createClassNode(reactFiber, componentStore, treeId) {
 }
 
 function createStatelessNode(reactFiber, treeId) {
-  console.log('Creating Stateless Node');
+  // console.log('Creating Stateless Node');
   return new CustomFiberNode(`${treeId}'Stateless'`, 'stateless', reactFiber);
 }
