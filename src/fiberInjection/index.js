@@ -20,6 +20,7 @@ console.log('INJECTED SCRIPT EPOCH IS HERE');
 window.addEventListener('message', (event) => {
   if (event.source !== window) return;
   const epochHook = window[epochHookProp];
+  console.log('Message Type in Injections -> ', event.data.type);
 
   if (event.data && event.data.type === '$$$initializeComponentStoreScript$$$') {
     console.log('Initializing Component Store');
@@ -61,7 +62,7 @@ window.addEventListener('message', (event) => {
 
     const apolloClientObj = window.__APOLLO_CLIENT__;
     const apolloClientClone = cloneDeep(apolloClientObj);
-    historicalClients.addHistoricalClient(apolloClientClone, 'initialClient');
+    historicalClients.addHistoricalClient(apolloClientClone, apolloActionId);
     console.log('CLONE -> ', apolloClientClone);
     window.postMessage(
       { type: '$$$saveSnapshot$$$', payload: JSON.stringify(initialFiberSnapshot) },
